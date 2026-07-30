@@ -1,0 +1,89 @@
+# ==========================================
+# WEB API - BACKEND
+# ==========================================
+fastapi
+uvicorn[standard]
+
+
+# ==========================================
+# CONFIGURATION
+# ==========================================
+python-dotenv
+pydantic
+pydantic-settings
+
+
+# ==========================================
+# DATABASE CONNECTORS
+# ==========================================
+
+# ORM SQL
+sqlalchemy
+alembic
+
+# PostgreSQL (Academic DB + Warehouse)
+psycopg2-binary
+
+# MySQL (Learning Platform)
+pymysql
+
+# MongoDB (Mobile Logs)
+pymongo
+
+# Redis (Real-time data)
+redis
+
+
+# ==========================================
+# DATA ENGINEERING / ETL
+# ==========================================
+pandas
+numpy
+
+# fichiers CSV / Excel
+openpyxl
+
+# fichiers JSON/YAML
+pyyaml
+
+
+# ==========================================
+# DATA QUALITY
+# ==========================================
+great-expectations
+
+
+# ==========================================
+# ASYNCHRONOUS PROCESSING
+# ==========================================
+celery
+
+
+# ==========================================
+# MACHINE LEARNING / AI FUTUR
+# ==========================================
+scikit-learn
+scipy
+joblib
+
+
+# ==========================================
+# AUTHENTIFICATION
+# ==========================================
+python-jose[cryptography]
+passlib[bcrypt]
+
+
+# ==========================================
+# API UTILITIES
+# ==========================================
+python-multipart
+httpx
+
+
+# ==========================================
+# TESTS & QUALITE CODE
+# ==========================================
+pytest
+black
+flake8
