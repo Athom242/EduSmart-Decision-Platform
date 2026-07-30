@@ -1,0 +1,548 @@
+version: "3.9"
+
+# ==========================================================
+# DATA PLATFORM - DOCKER COMPOSE
+# ==========================================================
+
+
+services:
+
+# ==========================================================
+# FRONTEND - React / Vite
+# ==========================================================
+
+  frontend:
+    container_name: data_frontend
+
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    ports:
+      - "5173:5173"
+
+    environment:
+      NODE_ENV: development
+      VITE_API_URL: http://localhost:8000
+
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+    depends_on:
+      backend:
+        condition: service_healthy
+
+    networks:
+      - data_network
+
+    restart: unless-stopped
+
+
+
+# ==========================================================
+# BACKEND - FastAPI
+# ==========================================================
+
+  backend:
+
+    container_name: data_backend
+
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    ports:
+      - "8000:8000"
+
+
+    environment:
+
+      DATABASE_URL: postgresql://admin:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
+
+
+    volumes:
+      - ./backend:/app
+
+
+    depends_on:
+
+      postgres:
+        condition: service_healthy
+
+      mysql:
+        condition: service_healthy
+
+      redis:
+        condition: service_started
+
+
+    healthcheck:
+
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:8000/health"
+        ]
+
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+
+    networks:
+      - data_network
+
+
+    restart:
+      unless-stopped
+
+
+
+# ==========================================================
+# ETL PIPELINE - Python / Pandas
+# ==========================================================
+
+
+  etl:
+
+    container_name: data_etl
+
+
+    build:
+
+      context: ./etl
+      dockerfile: Dockerfile
+
+
+    environment:
+
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+
+      POSTGRES_DB: ${POSTGRES_DB}
+
+      POSTGRES_USER:
+        ${POSTGRES_USER}
+
+      POSTGRES_PASSWORD:
+        ${POSTGRES_PASSWORD}
+
+
+
+    volumes:
+
+      - ./etl:/etl
+
+      - ./data:/data
+
+
+
+    depends_on:
+
+      postgres:
+
+        condition:
+          service_healthy
+
+
+    networks:
+
+      - data_network
+
+
+    restart:
+
+      unless-stopped
+
+
+
+
+# ==========================================================
+# DASHBOARD - Streamlit / Dash
+# ==========================================================
+
+
+  dashboard:
+
+
+    container_name:
+      data_dashboard
+
+
+    build:
+
+      context: ./dashboard
+
+      dockerfile:
+        Dockerfile
+
+
+
+    ports:
+
+      - "8501:8501"
+
+
+
+    environment:
+
+      API_URL:
+        http://backend:8000
+
+
+
+    depends_on:
+
+      backend:
+
+        condition:
+          service_healthy
+
+
+
+    networks:
+
+      - data_network
+
+
+
+    restart:
+
+      unless-stopped
+
+
+
+
+# ==========================================================
+# POSTGRESQL - DATA WAREHOUSE
+# ==========================================================
+
+
+  postgres:
+
+
+    container_name:
+      data_postgres
+
+
+
+    image:
+      postgres:17
+
+
+
+    environment:
+
+      POSTGRES_DB:
+        ${POSTGRES_DB}
+
+
+      POSTGRES_USER:
+        ${POSTGRES_USER}
+
+
+      POSTGRES_PASSWORD:
+        ${POSTGRES_PASSWORD}
+
+
+
+    ports:
+
+      - "5432:5432"
+
+
+
+    volumes:
+
+      - postgres_data:/var/lib/postgresql/data
+
+
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+
+
+    healthcheck:
+
+
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER}"
+        ]
+
+
+      interval:
+        10s
+
+
+      timeout:
+        5s
+
+
+      retries:
+        5
+
+
+
+    networks:
+
+      - data_network
+
+
+
+    restart:
+
+      unless-stopped
+
+
+
+
+# ==========================================================
+# MYSQL - OPERATIONAL DATABASE
+# ==========================================================
+
+
+  mysql:
+
+
+    container_name:
+      data_mysql
+
+
+
+    image:
+      mysql:8.4
+
+
+
+    environment:
+
+
+      MYSQL_DATABASE:
+        ${MYSQL_DATABASE}
+
+
+      MYSQL_USER:
+        ${MYSQL_USER}
+
+
+      MYSQL_PASSWORD:
+        ${MYSQL_PASSWORD}
+
+
+      MYSQL_ROOT_PASSWORD:
+        ${MYSQL_ROOT_PASSWORD}
+
+
+
+    ports:
+
+      - "3306:3306"
+
+
+
+    volumes:
+
+
+      - mysql_data:/var/lib/mysql
+
+
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+
+
+    healthcheck:
+
+
+      test:
+
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost"
+        ]
+
+
+      interval:
+        10s
+
+
+      timeout:
+        5s
+
+
+      retries:
+        5
+
+
+
+    networks:
+
+      - data_network
+
+
+
+    restart:
+
+      unless-stopped
+
+
+
+
+
+# ==========================================================
+# MONGODB - DOCUMENT DATABASE
+# ==========================================================
+
+
+  mongodb:
+
+
+    container_name:
+      data_mongodb
+
+
+
+    image:
+      mongo:8
+
+
+
+    ports:
+
+      - "27017:27017"
+
+
+
+    volumes:
+
+
+      - mongodb_data:/data/db
+
+
+      - ./mongodb/init.js:/docker-entrypoint-initdb.d/init.js
+
+
+
+    networks:
+
+      - data_network
+
+
+
+    restart:
+
+      unless-stopped
+
+
+
+
+
+# ==========================================================
+# REDIS - CACHE
+# ==========================================================
+
+
+  redis:
+
+
+    container_name:
+      data_redis
+
+
+
+    image:
+      redis:7-alpine
+
+
+
+    ports:
+
+      - "6379:6379"
+
+
+
+    volumes:
+
+      - redis_data:/data
+
+
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+
+
+
+    command:
+
+      redis-server /usr/local/etc/redis/redis.conf
+
+
+
+    networks:
+
+      - data_network
+
+
+
+    restart:
+
+      unless-stopped
+
+
+
+
+
+# ==========================================================
+# NETWORKS
+# ==========================================================
+
+
+networks:
+
+
+  data_network:
+
+    driver:
+
+      bridge
+
+
+
+
+
+# ==========================================================
+# PERSISTENT STORAGE
+# ==========================================================
+
+
+volumes:
+
+
+  postgres_data:
+
+
+  mysql_data:
+
+
+  mongodb_data:
+
+
+  redis_data:
