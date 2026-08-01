@@ -1,0 +1,28 @@
+# Environnement / secrets
+.env
+.env.*
+
+# Données générées (ne doivent pas être embarquées dans l'image)
+data/
+*.jsonl
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# Git
+.git/
+.gitignore
+
+# Éditeurs / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Divers
+*.log
+README.md

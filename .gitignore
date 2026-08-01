@@ -132,6 +132,7 @@ build/
 data/raw/
 data/processed/
 data/output/
+mongo_source/data
 
 
 # Temporary datasets
