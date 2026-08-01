@@ -83,6 +83,9 @@ services:
       redis:
         condition: service_started
 
+      mongodb:
+        condition: service_healthy
+
 
     healthcheck:
 
@@ -319,7 +322,7 @@ services:
 
     container_name: data_mongodb
 
-    image: mongo:8
+    image: mongo
 
 
     ports:
@@ -331,7 +334,21 @@ services:
 
       - mongodb_data:/data/db
 
-      - ./mongodb/init.js:/docker-entrypoint-initdb.d/init.js
+
+    healthcheck:
+
+      test:
+        [
+          "CMD",
+          "mongosh",
+          "--quiet",
+          "--eval",
+          "db.adminCommand('ping')"
+        ]
+
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 
     networks:
@@ -377,6 +394,43 @@ services:
 
 
     restart: unless-stopped
+
+
+
+
+
+# ==============================
+# MONGO SOURCE (Source 4 — Journaux app mobile)
+# ==============================
+
+  mongo_source:
+
+    container_name: data_mongo_source
+
+    build:
+      context: ./mongo_source
+      dockerfile: Dockerfile
+
+    environment:
+
+      MONGO_URI: mongodb://mongodb:27017
+      DB_NAME: edusmart_mongo
+      COLLECTION_NAME: events
+
+    volumes:
+
+      - ./data:/app/data
+
+    depends_on:
+
+      mongodb:
+        condition: service_healthy
+
+    networks:
+
+      - data_network
+
+    restart: "no"
 
 
 
