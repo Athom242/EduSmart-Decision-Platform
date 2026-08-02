@@ -16,7 +16,7 @@ except ImportError:
     pass
 
 # Connexion à la base de données MongoDB
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://mongodb:27017")
 DB_NAME = os.getenv("DB_NAME", "edusmart_mongo")
 COLLECTION_NAME = os.getenv("COLLECTION_NAME", "events")
 
