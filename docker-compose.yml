@@ -1,10 +1,8 @@
-version: "3.9"
-
 services:
 
-# ==============================
+# ==================================
 # FRONTEND React + Vite
-# ==============================
+# ==================================
 
   frontend:
     container_name: data_frontend
@@ -35,9 +33,9 @@ services:
 
 
 
-# ==============================
+# ==================================
 # BACKEND FastAPI
-# ==============================
+# ==================================
 
   backend:
 
@@ -47,13 +45,14 @@ services:
       context: ./backend
       dockerfile: Dockerfile
 
+
     ports:
       - "8000:8000"
 
 
     environment:
 
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}"
 
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
@@ -111,13 +110,14 @@ services:
 
 
 
-# ==============================
+# ==================================
 # ETL PIPELINE
-# ==============================
+# ==================================
 
   etl:
 
     container_name: data_etl
+
 
     build:
       context: ./etl
@@ -132,11 +132,19 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
+      MYSQL_HOST: mysql
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+      MONGO_URI: mongodb://mongodb:27017
+
 
     volumes:
 
-      - ./etl:/etl
+      - ./etl:/app
       - ./data:/data
+      - ./csv:/csv
 
 
     depends_on:
@@ -144,8 +152,15 @@ services:
       postgres:
         condition: service_healthy
 
+      mysql:
+        condition: service_healthy
+
+      mongodb:
+        condition: service_healthy
+
 
     networks:
+
       - data_network
 
 
@@ -154,10 +169,9 @@ services:
 
 
 
-
-# ==============================
+# ==================================
 # DASHBOARD
-# ==============================
+# ==================================
 
   dashboard:
 
@@ -180,6 +194,11 @@ services:
       API_URL: http://backend:8000
 
 
+    volumes:
+
+      - ./dashboard:/app
+
+
     depends_on:
 
       backend:
@@ -197,13 +216,14 @@ services:
 
 
 
-# ==============================
+# ==================================
 # POSTGRESQL
-# ==============================
+# ==================================
 
   postgres:
 
     container_name: data_postgres
+
 
     image: postgres:17
 
@@ -226,7 +246,7 @@ services:
 
       - postgres_data:/var/lib/postgresql/data
 
-      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres:/docker-entrypoint-initdb.d
 
 
     healthcheck:
@@ -253,13 +273,14 @@ services:
 
 
 
-# ==============================
+# ==================================
 # MYSQL
-# ==============================
+# ==================================
 
   mysql:
 
     container_name: data_mysql
+
 
     image: mysql:8.4
 
@@ -284,7 +305,7 @@ services:
 
       - mysql_data:/var/lib/mysql
 
-      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql:/docker-entrypoint-initdb.d
 
 
     healthcheck:
@@ -299,7 +320,9 @@ services:
         ]
 
       interval: 10s
+
       timeout: 5s
+
       retries: 5
 
 
@@ -314,15 +337,16 @@ services:
 
 
 
-# ==============================
-# MONGODB
-# ==============================
+# ==================================
+# MONGODB DATABASE
+# ==================================
 
   mongodb:
 
     container_name: data_mongodb
 
-    image: mongo
+
+    image: mongo:8
 
 
     ports:
@@ -341,14 +365,17 @@ services:
         [
           "CMD",
           "mongosh",
-          "--quiet",
           "--eval",
           "db.adminCommand('ping')"
         ]
 
       interval: 10s
+
       timeout: 5s
+
       retries: 5
+
+      start_period: 20s
 
 
     networks:
@@ -362,13 +389,64 @@ services:
 
 
 
-# ==============================
+# ==================================
+# MONGODB DATA GENERATOR / LOADER
+# ==================================
+
+  mongo_source:
+
+    container_name: data_mongo_source
+
+
+    build:
+
+      context: ./mongodb
+
+      dockerfile: Dockerfile
+
+
+    environment:
+
+      MONGO_URI: mongodb://mongodb:27017
+
+      DB_NAME: edusmart_mongo
+
+      COLLECTION_NAME: events
+
+
+    volumes:
+
+      - ./mongodb:/app
+
+      - ./data:/app/data
+
+
+    depends_on:
+
+      mongodb:
+
+        condition: service_healthy
+
+
+    networks:
+
+      - data_network
+
+
+    restart: "no"
+
+
+
+
+
+# ==================================
 # REDIS
-# ==============================
+# ==================================
 
   redis:
 
     container_name: data_redis
+
 
     image: redis:7-alpine
 
@@ -385,7 +463,9 @@ services:
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
 
 
-    command: redis-server /usr/local/etc/redis/redis.conf
+    command:
+
+      redis-server /usr/local/etc/redis/redis.conf
 
 
     networks:
@@ -399,46 +479,9 @@ services:
 
 
 
-# ==============================
-# MONGO SOURCE (Source 4 — Journaux app mobile)
-# ==============================
-
-  mongo_source:
-
-    container_name: data_mongo_source
-
-    build:
-      context: ./mongo_source
-      dockerfile: Dockerfile
-
-    environment:
-
-      MONGO_URI: mongodb://mongodb:27017
-      DB_NAME: edusmart_mongo
-      COLLECTION_NAME: events
-
-    volumes:
-
-      - ./data:/app/data
-
-    depends_on:
-
-      mongodb:
-        condition: service_healthy
-
-    networks:
-
-      - data_network
-
-    restart: "no"
-
-
-
-
-
-# ==============================
+# ==================================
 # NETWORK
-# ==============================
+# ==================================
 
 networks:
 
@@ -450,9 +493,9 @@ networks:
 
 
 
-# ==============================
+# ==================================
 # VOLUMES
-# ==============================
+# ==================================
 
 volumes:
 
