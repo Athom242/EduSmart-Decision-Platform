@@ -11,8 +11,8 @@ set -e  # arrête le script au premier échec
 echo "=== [1/3] Création de la base et des index ==="
 python create_source.py
 
-echo "=== [2/3] Génération du dataset ==="
-python generate_data.py
+# echo "=== [2/3] Génération du dataset ==="
+# python generate_data.py
 
 echo "=== [3/3] Insertion en base MongoDB ==="
 python insert_data.py

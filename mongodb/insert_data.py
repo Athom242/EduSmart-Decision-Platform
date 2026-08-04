@@ -139,4 +139,4 @@ def main():
 if __name__ == "__main__":
     main()
     # Récupérer un échantillon des 100 premières lignes
-    sample_first_lines(INPUT_FILE, "mongo_source/data/sample.jsonl", 100)
+    # sample_first_lines(INPUT_FILE, "data/sample.jsonl", 100)

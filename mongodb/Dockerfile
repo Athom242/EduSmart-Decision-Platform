@@ -15,7 +15,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copie du code source
-COPY create_source.py generate_data.py insert_data.py entrypoint.sh ./
+COPY create_source.py insert_data.py entrypoint.sh ./
 
 # Dossier de sortie des données, appartenant à l'utilisateur non-root
 RUN mkdir -p /app/data && \
