@@ -20,6 +20,7 @@ COPY create_source.py generate_data.py extract_seed.py insert_data.py entrypoint
 # Copie du dataset pré-généré (archive versionnée sur GitHub)
 COPY data/events.tar.gz ./data/events.tar.gz
 
+
 # Dossier de sortie des données, appartenant à l'utilisateur non-root
 RUN mkdir -p /app/data && \
     chmod +x entrypoint.sh && \

@@ -168,10 +168,9 @@ checkpoints/
 # PostgreSQL dumps
 
 *.sql.gz
-
+!mysql/edusmart_learning_dump.sql.gz
 
 # MySQL dumps
-
 *.dump
 
 
