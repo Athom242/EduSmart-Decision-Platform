@@ -15,7 +15,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copie du code source
-COPY create_source.py insert_data.py entrypoint.sh ./
+COPY create_source.py generate_data.py extract_seed.py insert_data.py entrypoint.sh ./
+
+# Copie du dataset pré-généré (archive versionnée sur GitHub)
+COPY seed/events.tar.gz ./seed/events.tar.gz
 
 # Dossier de sortie des données, appartenant à l'utilisateur non-root
 RUN mkdir -p /app/data && \

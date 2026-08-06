@@ -14,6 +14,9 @@ python create_source.py
 # echo "=== [2/3] Génération du dataset ==="
 # python generate_data.py
 
+echo "=== [2/3] Extraction du dataset pré-généré ==="
+python extract_seed.py
+
 echo "=== [3/3] Insertion en base MongoDB ==="
 python insert_data.py
 
