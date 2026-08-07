@@ -1,31 +1,35 @@
 FROM python:3.11-slim
 
-# Utilisateur non-root pour l'exécution du conteneur
+# 1. Création de l'utilisateur non-root
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 
 WORKDIR /app
 
-# Dépendances système minimales (curl utile pour du debug réseau si besoin)
+# 2. Installation des dépendances système (en tant que root)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Installation des dépendances Python (couche mise en cache séparément du code)
+# 3. Installation des dépendances Python
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copie du code source
-COPY create_source.py generate_data.py extract_seed.py insert_data.py entrypoint.sh ./
+# 4. Copie des scripts et du code
+# Astuce : Utilisez --chmod pour donner les droits d'exécution directement lors de la copie
+COPY --chmod=755 entrypoint.sh .
+COPY create_source.py generate_data.py extract_seed.py insert_data.py .
 
-# Copie du dataset pré-généré (archive versionnée sur GitHub)
-COPY data/events.tar.gz ./data/events.tar.gz
+# 5. Copie du dataset
+COPY ./data/events.tar.gz ./data/events.tar.gz
 
-
-# Dossier de sortie des données, appartenant à l'utilisateur non-root
+# 6. Préparation des droits et propriété (TOUJOURS avant USER, donc en root)
+# On s'assure que le dossier data existe et appartient à appuser
 RUN mkdir -p /app/data && \
-    chmod +x entrypoint.sh && \
     chown -R appuser:appuser /app
 
+# 7. Bascule vers l'utilisateur non-root (DOIT être la dernière modification de contexte)
 USER appuser
 
-ENTRYPOINT ["./entrypoint.sh"]
+# 8. Définition du point d'entrée
+# Utilisation du chemin absolu pour plus de robustesse
+ENTRYPOINT ["/app/entrypoint.sh"]   

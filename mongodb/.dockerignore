@@ -3,7 +3,7 @@
 .env.*
 
 # Données générées (ne doivent pas être embarquées dans l'image)
-data/
+# data/
 *.jsonl
 
 # Python
