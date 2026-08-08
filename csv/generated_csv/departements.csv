@@ -1,0 +1,31 @@
+id_departement,nom_departement,responsable,budget_annuel,batiment
+1,Réseaux,Noël Le Goff,2266481.9,Bâtiment 6
+2,Intelligence Artificielle,Luce Garcia,511099.32,Bâtiment 2
+3,Informatique,Claude-Dominique Hoareau,4170048.4,Bâtiment 6
+4,Cybersécurité,Théophile Lambert,4123334.55,Bâtiment 3
+5,Réseaux,Anne Mace,2221812.95,Bâtiment 5
+6,Cybersécurité,Antoine Meunier,2413004.14,Bâtiment 3
+7,Data,Charlotte Turpin de la Cordier,2132225.54,Bâtiment 2
+8,Développement,Thomas Loiseau,2233863.66,Bâtiment 3
+9,Data,Nathalie Garnier-Pineau,3493167.58,Bâtiment 2
+10,Cybersécurité,Marianne Albert,3443837.77,Bâtiment 1
+11,Développement,Daniel de Couturier,3215516.27,Bâtiment 5
+12,Data,Jeanne Albert,4012704.47,Bâtiment 2
+13,Cloud,Guillaume Paris,2003227.6,Bâtiment 4
+14,Cybersécurité,Éléonore Girard,3305062.54,Bâtiment 4
+15,Cloud,Jean Riou,4049521.33,Bâtiment 2
+16,Réseaux,Emmanuel-François Mercier,4646689.81,Bâtiment 10
+17,Cybersécurité,Catherine Gaudin,1301795.37,Bâtiment 1
+18,Intelligence Artificielle,Suzanne Labbé,3070884.95,Bâtiment 5
+19,Développement,Roger Lecoq,3536774.41,Bâtiment 9
+20,Intelligence Artificielle,Simone Hernandez,2932098.18,Bâtiment 3
+21,Informatique,Audrey Dias de la Antoine,4055063.83,Bâtiment 3
+22,Informatique,Margaret Lagarde,3904552.46,Bâtiment 4
+23,Réseaux,Alain Chauvet,1849530.98,Bâtiment 9
+24,Data,Thierry Bouchet-Lefebvre,3802300.88,Bâtiment 2
+25,Data,Victor Guyon de Reynaud,719939.69,Bâtiment 6
+26,Cybersécurité,Margaret Diallo,3070738.48,Bâtiment 7
+27,Réseaux,Isaac Carre,2385753.24,Bâtiment 7
+28,Informatique,Aimé Giraud,2115422.21,Bâtiment 8
+29,Développement,Zacharie Lefort,3740821.86,Bâtiment 8
+30,Réseaux,Marc Collin,4249150.95,Bâtiment 5
