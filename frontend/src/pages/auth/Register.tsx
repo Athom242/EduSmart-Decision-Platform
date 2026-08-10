@@ -1,45 +1,127 @@
-import { FormEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import type { FormEvent } from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import styles from "../../styles/Register.module.scss";
 
-const Register = () => {
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+const Register = (): React.JSX.Element => {
+    const navigate = useNavigate();
 
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [role, setRole] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [acceptTerms, setAcceptTerms] = useState(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [showConfirmPassword, setShowConfirmPassword] =
+        useState<boolean>(false);
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const [firstName, setFirstName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
+    const [role, setRole] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [confirmPassword, setConfirmPassword] =
+        useState<string>("");
+
+    const [acceptTerms, setAcceptTerms] =
+        useState<boolean>(false);
+
+    const [error, setError] = useState<string>("");
+
+    const handleSubmit = (
+        event: FormEvent<HTMLFormElement>
+    ): void => {
         event.preventDefault();
 
+        setError("");
+
+        /*
+         * ============================================
+         * VALIDATION
+         * ============================================
+         */
+
+        if (
+            !firstName ||
+            !lastName ||
+            !email ||
+            !role ||
+            !password ||
+            !confirmPassword
+        ) {
+            setError(
+                "Veuillez remplir tous les champs."
+            );
+
+            return;
+        }
+
+        if (password.length < 8) {
+            setError(
+                "Le mot de passe doit contenir au moins 8 caractères."
+            );
+
+            return;
+        }
+
         if (password !== confirmPassword) {
-            console.error("Les mots de passe ne correspondent pas.");
+            setError(
+                "Les mots de passe ne correspondent pas."
+            );
+
             return;
         }
 
         if (!acceptTerms) {
-            console.error("Vous devez accepter les conditions.");
+            setError(
+                "Vous devez accepter les conditions d'utilisation."
+            );
+
             return;
         }
 
-        console.log({
+        /*
+         * ============================================
+         * DONNÉES DU FORMULAIRE
+         * ============================================
+         */
+
+        const userData = {
             firstName,
             lastName,
             email,
             role,
             password,
-            confirmPassword,
-            acceptTerms,
-        });
+        };
 
-        // TODO:
-        // Connecter le formulaire à l'API d'inscription.
+        console.log(
+            "Inscription réussie :",
+            userData
+        );
+
+        /*
+         * ============================================
+         * TODO : API
+         * ============================================
+         *
+         * Ici tu feras plus tard :
+         *
+         * await fetch("/api/auth/register", {
+         *     method: "POST",
+         *     headers: {
+         *         "Content-Type": "application/json",
+         *     },
+         *     body: JSON.stringify(userData),
+         * });
+         *
+         */
+
+        /*
+         * ============================================
+         * REDIRECTION
+         * ============================================
+         *
+         * L'inscription est validée.
+         * On redirige vers la connexion.
+         */
+
+        navigate("/login");
     };
 
     return (
@@ -75,23 +157,34 @@ const Register = () => {
                     </div>
 
                     <div className={styles.register__brandText}>
-                        <strong>EduSmart</strong>
-                        <span>Decision Platform</span>
+                        <strong>
+                            EduSmart
+                        </strong>
+
+                        <span>
+                            Decision Platform
+                        </span>
                     </div>
                 </Link>
 
 
                 {/* =================================================
-                    CARD
+                    REGISTER CARD
                 ================================================= */}
 
                 <section className={styles.register__card}>
 
-                    {/* Header */}
+                    {/* =================================================
+                        HEADER
+                    ================================================= */}
 
                     <div className={styles.register__header}>
 
-                        <span className={styles.register__eyebrow}>
+                        <span
+                            className={
+                                styles.register__eyebrow
+                            }
+                        >
                             CRÉER UN COMPTE
                         </span>
 
@@ -100,11 +193,27 @@ const Register = () => {
                         </h1>
 
                         <p>
-                            Créez votre compte et accédez à votre
-                            espace de travail éducatif.
+                            Créez votre compte et accédez à
+                            votre espace de travail éducatif.
                         </p>
 
                     </div>
+
+
+                    {/* =================================================
+                        ERROR
+                    ================================================= */}
+
+                    {error && (
+                        <div
+                            className={
+                                styles.register__error
+                            }
+                            role="alert"
+                        >
+                            {error}
+                        </div>
+                    )}
 
 
                     {/* =================================================
@@ -117,12 +226,20 @@ const Register = () => {
                     >
 
                         {/* =================================================
-                            NAME
+                            FIRST NAME / LAST NAME
                         ================================================= */}
 
-                        <div className={styles.register__row}>
+                        <div
+                            className={
+                                styles.register__row
+                            }
+                        >
 
-                            <div className={styles.register__field}>
+                            <div
+                                className={
+                                    styles.register__field
+                                }
+                            >
 
                                 <label htmlFor="firstName">
                                     Prénom
@@ -134,8 +251,12 @@ const Register = () => {
                                     type="text"
                                     placeholder="Anthony"
                                     value={firstName}
-                                    onChange={(event) =>
-                                        setFirstName(event.target.value)
+                                    onChange={(
+                                        event
+                                    ) =>
+                                        setFirstName(
+                                            event.target.value
+                                        )
                                     }
                                     autoComplete="given-name"
                                     required
@@ -144,7 +265,11 @@ const Register = () => {
                             </div>
 
 
-                            <div className={styles.register__field}>
+                            <div
+                                className={
+                                    styles.register__field
+                                }
+                            >
 
                                 <label htmlFor="lastName">
                                     Nom
@@ -156,8 +281,12 @@ const Register = () => {
                                     type="text"
                                     placeholder="Moussavou"
                                     value={lastName}
-                                    onChange={(event) =>
-                                        setLastName(event.target.value)
+                                    onChange={(
+                                        event
+                                    ) =>
+                                        setLastName(
+                                            event.target.value
+                                        )
                                     }
                                     autoComplete="family-name"
                                     required
@@ -172,16 +301,26 @@ const Register = () => {
                             EMAIL
                         ================================================= */}
 
-                        <div className={styles.register__field}>
+                        <div
+                            className={
+                                styles.register__field
+                            }
+                        >
 
                             <label htmlFor="email">
                                 Adresse email
                             </label>
 
-                            <div className={styles.register__inputWrapper}>
+                            <div
+                                className={
+                                    styles.register__inputWrapper
+                                }
+                            >
 
                                 <span
-                                    className={styles.register__inputIcon}
+                                    className={
+                                        styles.register__inputIcon
+                                    }
                                     aria-hidden="true"
                                 >
                                     @
@@ -193,8 +332,12 @@ const Register = () => {
                                     type="email"
                                     placeholder="exemple@edusmart.com"
                                     value={email}
-                                    onChange={(event) =>
-                                        setEmail(event.target.value)
+                                    onChange={(
+                                        event
+                                    ) =>
+                                        setEmail(
+                                            event.target.value
+                                        )
                                     }
                                     autoComplete="email"
                                     required
@@ -209,7 +352,11 @@ const Register = () => {
                             ROLE
                         ================================================= */}
 
-                        <div className={styles.register__field}>
+                        <div
+                            className={
+                                styles.register__field
+                            }
+                        >
 
                             <label htmlFor="role">
                                 Type de compte
@@ -219,12 +366,20 @@ const Register = () => {
                                 id="role"
                                 name="role"
                                 value={role}
-                                onChange={(event) =>
-                                    setRole(event.target.value)
+                                onChange={(
+                                    event
+                                ) =>
+                                    setRole(
+                                        event.target.value
+                                    )
                                 }
                                 required
                             >
-                                <option value="" disabled>
+
+                                <option
+                                    value=""
+                                    disabled
+                                >
                                     Sélectionnez votre profil
                                 </option>
 
@@ -239,6 +394,7 @@ const Register = () => {
                                 <option value="admin">
                                     Administrateur
                                 </option>
+
                             </select>
 
                         </div>
@@ -248,13 +404,21 @@ const Register = () => {
                             PASSWORD
                         ================================================= */}
 
-                        <div className={styles.register__field}>
+                        <div
+                            className={
+                                styles.register__field
+                            }
+                        >
 
                             <label htmlFor="password">
                                 Mot de passe
                             </label>
 
-                            <div className={styles.register__inputWrapper}>
+                            <div
+                                className={
+                                    styles.register__inputWrapper
+                                }
+                            >
 
                                 <input
                                     id="password"
@@ -266,8 +430,12 @@ const Register = () => {
                                     }
                                     placeholder="Minimum 8 caractères"
                                     value={password}
-                                    onChange={(event) =>
-                                        setPassword(event.target.value)
+                                    onChange={(
+                                        event
+                                    ) =>
+                                        setPassword(
+                                            event.target.value
+                                        )
                                     }
                                     autoComplete="new-password"
                                     minLength={8}
@@ -276,10 +444,15 @@ const Register = () => {
 
                                 <button
                                     type="button"
-                                    className={styles.register__passwordToggle}
+                                    className={
+                                        styles.register__passwordToggle
+                                    }
                                     onClick={() =>
                                         setShowPassword(
-                                            (current) => !current
+                                            (
+                                                current
+                                            ) =>
+                                                !current
                                         )
                                     }
                                 >
@@ -297,13 +470,21 @@ const Register = () => {
                             CONFIRM PASSWORD
                         ================================================= */}
 
-                        <div className={styles.register__field}>
+                        <div
+                            className={
+                                styles.register__field
+                            }
+                        >
 
                             <label htmlFor="confirmPassword">
                                 Confirmer le mot de passe
                             </label>
 
-                            <div className={styles.register__inputWrapper}>
+                            <div
+                                className={
+                                    styles.register__inputWrapper
+                                }
+                            >
 
                                 <input
                                     id="confirmPassword"
@@ -315,7 +496,9 @@ const Register = () => {
                                     }
                                     placeholder="Confirmez votre mot de passe"
                                     value={confirmPassword}
-                                    onChange={(event) =>
+                                    onChange={(
+                                        event
+                                    ) =>
                                         setConfirmPassword(
                                             event.target.value
                                         )
@@ -327,10 +510,15 @@ const Register = () => {
 
                                 <button
                                     type="button"
-                                    className={styles.register__passwordToggle}
+                                    className={
+                                        styles.register__passwordToggle
+                                    }
                                     onClick={() =>
                                         setShowConfirmPassword(
-                                            (current) => !current
+                                            (
+                                                current
+                                            ) =>
+                                                !current
                                         )
                                     }
                                 >
@@ -348,12 +536,18 @@ const Register = () => {
                             TERMS
                         ================================================= */}
 
-                        <label className={styles.register__terms}>
+                        <label
+                            className={
+                                styles.register__terms
+                            }
+                        >
 
                             <input
                                 type="checkbox"
                                 checked={acceptTerms}
-                                onChange={(event) =>
+                                onChange={(
+                                    event
+                                ) =>
                                     setAcceptTerms(
                                         event.target.checked
                                     )
@@ -362,9 +556,9 @@ const Register = () => {
                             />
 
                             <span>
-                                J'accepte les conditions d'utilisation
-                                et la politique de confidentialité
-                                d'EduSmart.
+                                J'accepte les conditions
+                                d'utilisation et la politique
+                                de confidentialité d'EduSmart.
                             </span>
 
                         </label>
@@ -376,8 +570,11 @@ const Register = () => {
 
                         <button
                             type="submit"
-                            className={styles.register__submit}
+                            className={
+                                styles.register__submit
+                            }
                         >
+
                             <span>
                                 Créer mon compte
                             </span>
@@ -385,16 +582,21 @@ const Register = () => {
                             <span aria-hidden="true">
                                 →
                             </span>
+
                         </button>
 
                     </form>
 
 
                     {/* =================================================
-                        LOGIN
+                        LOGIN LINK
                     ================================================= */}
 
-                    <div className={styles.register__login}>
+                    <div
+                        className={
+                            styles.register__login
+                        }
+                    >
 
                         <span>
                             Vous avez déjà un compte ?
@@ -413,15 +615,23 @@ const Register = () => {
                     SECURITY
                 ================================================= */}
 
-                <div className={styles.register__security}>
+                <div
+                    className={
+                        styles.register__security
+                    }
+                >
 
-                    <span className={styles.register__securityIcon}>
+                    <span
+                        className={
+                            styles.register__securityIcon
+                        }
+                    >
                         ✓
                     </span>
 
                     <span>
-                        Vos informations sont protégées et
-                        sécurisées.
+                        Vos informations sont protégées
+                        et sécurisées.
                     </span>
 
                 </div>
@@ -431,13 +641,19 @@ const Register = () => {
                     FOOTER
                 ================================================= */}
 
-                <div className={styles.register__footer}>
+                <div
+                    className={
+                        styles.register__footer
+                    }
+                >
 
                     <span>
                         © {new Date().getFullYear()} EduSmart
                     </span>
 
-                    <span>·</span>
+                    <span>
+                        ·
+                    </span>
 
                     <Link to="/">
                         Retour à l'accueil
@@ -446,6 +662,7 @@ const Register = () => {
                 </div>
 
             </div>
+
         </main>
     );
 };

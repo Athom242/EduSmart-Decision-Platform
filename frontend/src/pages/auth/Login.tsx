@@ -1,36 +1,153 @@
-import { FormEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import type { FormEvent } from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import styles from "../../styles/Login.module.scss";
 
-const Login = () => {
-    const [showPassword, setShowPassword] = useState(false);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [rememberMe, setRememberMe] = useState(false);
+const Login = (): React.JSX.Element => {
+    const navigate = useNavigate();
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const [showPassword, setShowPassword] =
+        useState<boolean>(false);
+
+    const [email, setEmail] =
+        useState<string>("");
+
+    const [password, setPassword] =
+        useState<string>("");
+
+    const [rememberMe, setRememberMe] =
+        useState<boolean>(false);
+
+    const [error, setError] =
+        useState<string>("");
+
+    const [isLoading, setIsLoading] =
+        useState<boolean>(false);
+
+
+    /*
+     * ============================================================
+     * HANDLE LOGIN
+     * ============================================================
+     */
+
+    const handleSubmit = (
+        event: FormEvent<HTMLFormElement>
+    ): void => {
         event.preventDefault();
 
-        console.log({
+        setError("");
+
+        /*
+         * ========================================================
+         * VALIDATION
+         * ========================================================
+         */
+
+        if (!email || !password) {
+            setError(
+                "Veuillez renseigner votre adresse email et votre mot de passe."
+            );
+
+            return;
+        }
+
+
+        /*
+         * ========================================================
+         * LOADING
+         * ========================================================
+         */
+
+        setIsLoading(true);
+
+
+        /*
+         * ========================================================
+         * DONNÉES DE CONNEXION
+         * ========================================================
+         */
+
+        const loginData = {
             email,
             password,
             rememberMe,
-        });
+        };
 
-        // TODO:
-        // Ajouter ici l'appel à l'API d'authentification.
+
+        console.log(
+            "Tentative de connexion :",
+            loginData
+        );
+
+
+        /*
+         * ========================================================
+         * TODO : API AUTHENTICATION
+         * ========================================================
+         *
+         * Exemple futur :
+         *
+         * const response = await fetch(
+         *     "/api/auth/login",
+         *     {
+         *         method: "POST",
+         *
+         *         headers: {
+         *             "Content-Type":
+         *                 "application/json",
+         *         },
+         *
+         *         body: JSON.stringify(
+         *             loginData
+         *         ),
+         *     }
+         * );
+         *
+         */
+
+
+        /*
+         * ========================================================
+         * SIMULATION TEMPORAIRE
+         * ========================================================
+         *
+         * À supprimer lorsque ton backend sera connecté.
+         */
+
+        setTimeout(() => {
+
+            setIsLoading(false);
+
+            /*
+             * Redirection temporaire
+             * après une connexion simulée.
+             */
+
+            navigate("/dashboard");
+
+        }, 800);
     };
+
 
     return (
         <main className={styles.login}>
+
             {/* =====================================================
                 BACKGROUND
             ===================================================== */}
 
             <div className={styles.login__background}>
-                <div className={styles.login__orb} />
-                <div className={styles.login__grid} />
+
+                <div
+                    className={styles.login__orb}
+                />
+
+                <div
+                    className={styles.login__grid}
+                />
+
             </div>
 
 
@@ -39,6 +156,7 @@ const Login = () => {
             ===================================================== */}
 
             <div className={styles.login__container}>
+
 
                 {/* =================================================
                     BRAND
@@ -49,28 +167,52 @@ const Login = () => {
                     className={styles.login__brand}
                     aria-label="Retour à l'accueil EduSmart"
                 >
-                    <div className={styles.login__brandIcon}>
+
+                    <div
+                        className={styles.login__brandIcon}
+                    >
                         ES
                     </div>
 
-                    <div className={styles.login__brandText}>
-                        <strong>EduSmart</strong>
-                        <span>Decision Platform</span>
+                    <div
+                        className={styles.login__brandText}
+                    >
+
+                        <strong>
+                            EduSmart
+                        </strong>
+
+                        <span>
+                            Decision Platform
+                        </span>
+
                     </div>
+
                 </Link>
 
 
                 {/* =================================================
-                    CARD
+                    LOGIN CARD
                 ================================================= */}
 
-                <section className={styles.login__card}>
+                <section
+                    className={styles.login__card}
+                >
 
-                    {/* Header */}
 
-                    <div className={styles.login__header}>
+                    {/* =================================================
+                        HEADER
+                    ================================================= */}
 
-                        <span className={styles.login__eyebrow}>
+                    <div
+                        className={styles.login__header}
+                    >
+
+                        <span
+                            className={
+                                styles.login__eyebrow
+                            }
+                        >
                             ESPACE SÉCURISÉ
                         </span>
 
@@ -79,12 +221,30 @@ const Login = () => {
                         </h1>
 
                         <p>
-                            Connectez-vous pour accéder à votre
-                            espace de travail et exploiter vos
-                            données éducatives.
+                            Connectez-vous pour accéder à
+                            votre espace de travail et exploiter
+                            vos données éducatives.
                         </p>
 
                     </div>
+
+
+                    {/* =================================================
+                        ERROR
+                    ================================================= */}
+
+                    {error && (
+
+                        <div
+                            className={
+                                styles.login__error
+                            }
+                            role="alert"
+                        >
+                            {error}
+                        </div>
+
+                    )}
 
 
                     {/* =================================================
@@ -96,18 +256,29 @@ const Login = () => {
                         onSubmit={handleSubmit}
                     >
 
-                        {/* Email */}
 
-                        <div className={styles.login__field}>
+                        {/* =================================================
+                            EMAIL
+                        ================================================= */}
+
+                        <div
+                            className={styles.login__field}
+                        >
 
                             <label htmlFor="email">
                                 Adresse email
                             </label>
 
-                            <div className={styles.login__inputWrapper}>
+                            <div
+                                className={
+                                    styles.login__inputWrapper
+                                }
+                            >
 
                                 <span
-                                    className={styles.login__inputIcon}
+                                    className={
+                                        styles.login__inputIcon
+                                    }
                                     aria-hidden="true"
                                 >
                                     @
@@ -119,8 +290,12 @@ const Login = () => {
                                     type="email"
                                     placeholder="exemple@edusmart.com"
                                     value={email}
-                                    onChange={(event) =>
-                                        setEmail(event.target.value)
+                                    onChange={(
+                                        event
+                                    ) =>
+                                        setEmail(
+                                            event.target.value
+                                        )
                                     }
                                     autoComplete="email"
                                     required
@@ -131,27 +306,43 @@ const Login = () => {
                         </div>
 
 
-                        {/* Password */}
+                        {/* =================================================
+                            PASSWORD
+                        ================================================= */}
 
-                        <div className={styles.login__field}>
+                        <div
+                            className={styles.login__field}
+                        >
 
-                            <div className={styles.login__labelRow}>
+                            <div
+                                className={
+                                    styles.login__labelRow
+                                }
+                            >
 
                                 <label htmlFor="password">
                                     Mot de passe
                                 </label>
 
-                                <Link to="/forgot-password">
+                                <Link
+                                    to="/forgot-password"
+                                >
                                     Mot de passe oublié ?
                                 </Link>
 
                             </div>
 
 
-                            <div className={styles.login__inputWrapper}>
+                            <div
+                                className={
+                                    styles.login__inputWrapper
+                                }
+                            >
 
                                 <span
-                                    className={styles.login__inputIcon}
+                                    className={
+                                        styles.login__inputIcon
+                                    }
                                     aria-hidden="true"
                                 >
                                     •••
@@ -167,8 +358,12 @@ const Login = () => {
                                     }
                                     placeholder="Votre mot de passe"
                                     value={password}
-                                    onChange={(event) =>
-                                        setPassword(event.target.value)
+                                    onChange={(
+                                        event
+                                    ) =>
+                                        setPassword(
+                                            event.target.value
+                                        )
                                     }
                                     autoComplete="current-password"
                                     required
@@ -176,10 +371,15 @@ const Login = () => {
 
                                 <button
                                     type="button"
-                                    className={styles.login__passwordToggle}
+                                    className={
+                                        styles.login__passwordToggle
+                                    }
                                     onClick={() =>
                                         setShowPassword(
-                                            (current) => !current
+                                            (
+                                                current
+                                            ) =>
+                                                !current
                                         )
                                     }
                                     aria-label={
@@ -188,7 +388,11 @@ const Login = () => {
                                             : "Afficher le mot de passe"
                                     }
                                 >
-                                    {showPassword ? "Masquer" : "Afficher"}
+
+                                    {showPassword
+                                        ? "Masquer"
+                                        : "Afficher"}
+
                                 </button>
 
                             </div>
@@ -196,15 +400,25 @@ const Login = () => {
                         </div>
 
 
-                        {/* Remember */}
+                        {/* =================================================
+                            REMEMBER ME
+                        ================================================= */}
 
-                        <label className={styles.login__remember}>
+                        <label
+                            className={
+                                styles.login__remember
+                            }
+                        >
 
                             <input
                                 type="checkbox"
                                 checked={rememberMe}
-                                onChange={(event) =>
-                                    setRememberMe(event.target.checked)
+                                onChange={(
+                                    event
+                                ) =>
+                                    setRememberMe(
+                                        event.target.checked
+                                    )
                                 }
                             />
 
@@ -215,19 +429,30 @@ const Login = () => {
                         </label>
 
 
-                        {/* Submit */}
+                        {/* =================================================
+                            SUBMIT
+                        ================================================= */}
 
                         <button
                             type="submit"
-                            className={styles.login__submit}
+                            className={
+                                styles.login__submit
+                            }
+                            disabled={isLoading}
                         >
+
                             <span>
-                                Se connecter
+                                {isLoading
+                                    ? "Connexion..."
+                                    : "Se connecter"}
                             </span>
 
-                            <span aria-hidden="true">
-                                →
-                            </span>
+                            {!isLoading && (
+                                <span aria-hidden="true">
+                                    →
+                                </span>
+                            )}
+
                         </button>
 
                     </form>
@@ -237,10 +462,18 @@ const Login = () => {
                         DIVIDER
                     ================================================= */}
 
-                    <div className={styles.login__divider}>
+                    <div
+                        className={styles.login__divider}
+                    >
+
                         <span />
-                        <small>OU</small>
+
+                        <small>
+                            OU
+                        </small>
+
                         <span />
+
                     </div>
 
 
@@ -248,7 +481,11 @@ const Login = () => {
                         REGISTER
                     ================================================= */}
 
-                    <div className={styles.login__register}>
+                    <div
+                        className={
+                            styles.login__register
+                        }
+                    >
 
                         <span>
                             Vous n'avez pas encore de compte ?
@@ -267,15 +504,23 @@ const Login = () => {
                     SECURITY
                 ================================================= */}
 
-                <div className={styles.login__security}>
+                <div
+                    className={
+                        styles.login__security
+                    }
+                >
 
-                    <span className={styles.login__securityIcon}>
+                    <span
+                        className={
+                            styles.login__securityIcon
+                        }
+                    >
                         ✓
                     </span>
 
                     <span>
-                        Connexion sécurisée · Vos données restent
-                        protégées.
+                        Connexion sécurisée · Vos données
+                        restent protégées.
                     </span>
 
                 </div>
@@ -285,13 +530,19 @@ const Login = () => {
                     FOOTER
                 ================================================= */}
 
-                <div className={styles.login__footer}>
+                <div
+                    className={
+                        styles.login__footer
+                    }
+                >
 
                     <span>
                         © {new Date().getFullYear()} EduSmart
                     </span>
 
-                    <span>·</span>
+                    <span>
+                        ·
+                    </span>
 
                     <Link to="/">
                         Retour à l'accueil
@@ -300,6 +551,7 @@ const Login = () => {
                 </div>
 
             </div>
+
         </main>
     );
 };
