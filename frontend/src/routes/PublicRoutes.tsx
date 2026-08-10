@@ -8,20 +8,18 @@ import Features from "../pages/public/Features";
 import About from "../pages/public/About";
 import Contact from "../pages/public/Contact";
 
-// Auth
+// Authentication
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 
-
 const PublicRoutes: RouteObject = {
-
     path: "/",
 
     element: <PublicLayout />,
 
     children: [
-
+        // Public pages
         {
             index: true,
             element: <Home />,
@@ -42,9 +40,7 @@ const PublicRoutes: RouteObject = {
             element: <Contact />,
         },
 
-
         // Authentication
-
         {
             path: "login",
             element: <Login />,
@@ -59,10 +55,7 @@ const PublicRoutes: RouteObject = {
             path: "forgot-password",
             element: <ForgotPassword />,
         },
-
     ],
-
 };
-
 
 export default PublicRoutes;
