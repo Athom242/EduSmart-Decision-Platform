@@ -1,9 +1,12 @@
 import { Outlet } from "react-router-dom";
 
-import Navbar from "../components/navigation/Navbar/Navbar";
+
+import Header from "../components/navigation/Header/Header";
+// import Navbar from "../components/navigation/Navbar/Navbar";
 import Footer from "../components/navigation/Footer/Footer";
 
-import styles from "../styles/PublicLayout.scss";
+import styles from "../styles/PublicLayout.module.scss";
+
 
 
 const PublicLayout = () => {
@@ -11,9 +14,8 @@ const PublicLayout = () => {
     return (
 
         <div className={styles.public_layout}>
-
-
-            <Navbar />
+            <Header/>
+            {/* <Navbar /> */}
 
 
             <main className={styles.public_layout__content}>

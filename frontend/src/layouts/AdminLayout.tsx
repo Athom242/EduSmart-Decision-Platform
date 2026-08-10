@@ -5,7 +5,7 @@ import AdminSidebar from "../components/navigation/AdminSidebar/AdminSidebar";
 import AdminNavbar from "../components/navigation/AdminNavbar/AdminNavbar";
 
 
-import styles from "../styles/AdminLayout.scss";
+import styles from "../styles/AdminLayout.module.scss";
 
 
 

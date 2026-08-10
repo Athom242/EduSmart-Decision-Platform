@@ -1,4 +1,4 @@
-import "./StudentManagement.scss";
+import "../../../styles/StudentManagement.module.scss";
 
 const StudentManagement = () => {
 

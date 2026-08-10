@@ -1,4 +1,4 @@
-import "./Progress.scss";
+import "../../../styles/Progress.module.scss";
 
 
 const Progress = () => {

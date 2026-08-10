@@ -1,4 +1,4 @@
-import "./TeacherDashboard.scss";
+import "../../../styles/TeacherDashboard.module.scss";
 
 
 const TeacherDashboard = () => {

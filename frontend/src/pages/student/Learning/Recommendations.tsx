@@ -1,4 +1,4 @@
-import "./Recommendations.scss";
+import "../../../styles/Recommendations.module.scss";
 
 
 const Recommendations = () => {

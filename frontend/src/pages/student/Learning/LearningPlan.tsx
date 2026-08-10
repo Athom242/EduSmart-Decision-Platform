@@ -1,4 +1,4 @@
-import "./LearningPlan.scss";
+import "../../../styles/LearningPlan.module.scss";
 
 
 const LearningPlan = () => {

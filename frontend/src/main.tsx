@@ -4,7 +4,7 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
 
-import "./styles/index.scss";
+import "./styles/index.module.scss";
 
 import router from "./routes/AppRouter";
 

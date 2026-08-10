@@ -1,4 +1,4 @@
-import "./Clubs.scss";
+import "../../../styles/Clubs.module.scss";
 
 
 const Clubs = () => {

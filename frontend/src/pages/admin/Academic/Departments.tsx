@@ -1,4 +1,4 @@
-import "./Departments.scss";
+import "../../../styles/Departments.module.scss";
 
 const Departments = () => {
 

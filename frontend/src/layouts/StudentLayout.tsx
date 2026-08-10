@@ -5,7 +5,7 @@ import StudentSidebar from "../components/navigation/StudentSidebar/StudentSideb
 import StudentNavbar from "../components/navigation/StudentNavbar/StudentNavbar";
 
 
-import styles from "../StudentLayout.scss";
+import styles from "../../../styles/StudentLayout.module.scss";
 
 
 const StudentLayout = () => {

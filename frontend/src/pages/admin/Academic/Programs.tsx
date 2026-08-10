@@ -1,4 +1,4 @@
-import "./Programs.scss";
+import styles from "../../../styles/Programs.module.scss";
 
 const Programs = () => {
 

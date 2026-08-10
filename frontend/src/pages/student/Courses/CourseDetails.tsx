@@ -1,4 +1,4 @@
-import "./CourseDetails.scss";
+import "../../../styles/CourseDetails.module.scss";
 
 
 const CourseDetails = () => {

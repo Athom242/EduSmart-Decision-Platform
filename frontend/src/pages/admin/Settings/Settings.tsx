@@ -1,10 +1,10 @@
-import "./Settings.scss";
+import styles from "../../../styles/Settings.module.scss";
 
 const Settings = () => {
 
     return (
 
-        <section>
+        <section className={styles.settings}>
 
             <h1>Paramètres</h1>
 

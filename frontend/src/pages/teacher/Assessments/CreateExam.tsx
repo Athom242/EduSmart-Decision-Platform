@@ -1,4 +1,4 @@
-import "./CreateExam.scss";
+import "../../../styles/CreateExam.module.scss";
 
 
 const CreateExam = () => {

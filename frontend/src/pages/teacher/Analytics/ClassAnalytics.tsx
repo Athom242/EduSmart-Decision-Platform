@@ -1,4 +1,4 @@
-import "./ClassAnalytics.scss";
+import styles from "../../../styles/ClassAnalytics.module.scss";
 
 
 const ClassAnalytics = () => {
@@ -6,7 +6,7 @@ const ClassAnalytics = () => {
 
     return (
 
-        <section>
+        <section className={styles.ClassAnalytics_section}>
 
             <h1>
                 Analytics de la classe

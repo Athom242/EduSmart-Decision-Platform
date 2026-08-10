@@ -1,4 +1,4 @@
-import "./QualityManagement.scss";
+import "../../../styles/QualityManagement.module.scss";
 
 const QualityManagement = () => {
 

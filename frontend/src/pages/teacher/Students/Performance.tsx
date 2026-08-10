@@ -1,4 +1,4 @@
-import "./Performance.scss";
+import "../../../styles/Performance.module.scss";
 
 
 const Performance = () => {

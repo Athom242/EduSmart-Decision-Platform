@@ -1,4 +1,4 @@
-import "./Certificates.scss";
+import "../../../styles/Certificates.module.scss";
 
 
 const Certificates = () => {

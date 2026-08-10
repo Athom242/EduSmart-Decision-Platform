@@ -1,4 +1,4 @@
-import "./ManageCourses.scss";
+import "../../../styles/ManageCourses.module.scss";
 
 
 const ManageCourses = () => {

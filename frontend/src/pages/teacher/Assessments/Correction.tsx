@@ -1,4 +1,4 @@
-import "./Correction.scss";
+import "../../../styles/Correction.module.scss";
 
 
 const Correction = () => {

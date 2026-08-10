@@ -1,4 +1,4 @@
-import "./StudentTracking.scss";
+import "../../../styles/StudentTracking.module.scss";
 
 
 const StudentTracking = () => {

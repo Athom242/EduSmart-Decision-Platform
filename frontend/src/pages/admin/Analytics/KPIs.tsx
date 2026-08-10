@@ -1,10 +1,10 @@
-import "./KPIs.scss";
+import styles from "../../../styles/KPIs.module.scss";
 
 const KPIs = () => {
 
     return (
 
-        <section>
+        <section className={styles.kpis_section}>
 
             <h1>KPIs & Analytics</h1>
 

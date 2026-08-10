@@ -5,7 +5,7 @@ import TeacherSidebar from "../components/navigation/TeacherSidebar/TeacherSideb
 import TeacherNavbar from "../components/navigation/TeacherNavbar/TeacherNavbar";
 
 
-import styles from "../styles/TeacherLayout.scss";
+import styles from "../styles/TeacherLayout.module.scss";
 
 
 

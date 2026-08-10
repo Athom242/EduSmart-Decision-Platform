@@ -1,4 +1,4 @@
-import "./Network.scss";
+import "../../../styles/Network.module.scss";
 
 
 const Network = () => {

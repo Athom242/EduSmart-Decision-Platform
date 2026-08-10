@@ -1,4 +1,4 @@
-import "./InstitutionDashboard.scss";
+import "../../../styles/InstitutionDashboard.module.scss";
 
 const InstitutionDashboard = () => {
 

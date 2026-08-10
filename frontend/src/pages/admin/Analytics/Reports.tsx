@@ -1,4 +1,4 @@
-import "./Reports.scss";
+import "../../../styles/Reports.module.scss";
 
 const Reports = () => {
 

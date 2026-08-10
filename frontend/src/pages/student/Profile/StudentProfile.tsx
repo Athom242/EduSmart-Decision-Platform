@@ -1,4 +1,4 @@
-import "./StudentProfile.scss";
+import "../../../styles/StudentProfile.module.scss";
 
 
 const StudentProfile = () => {
