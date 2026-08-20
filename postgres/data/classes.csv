@@ -1,0 +1,11 @@
+﻿id_classe,code_classe,nom_classe,id_filiere,annee_academique,capacite,salle,responsable
+d3d428d2-34e3-4418-9196-1f34673c6e67,CL001,Classe 1,cb096b50-ca88-48b9-8c36-50783f1d9c89,2025-2026,30,Salle A0,Océane Gros Le Moreau
+7a7b0aed-1809-4ae1-8487-10fe51603919,CL002,Classe 2,3a494191-e967-4654-bdee-076ab6d4781c,2024/2025,10,A-1,Thérèse Godard
+f259d263-039d-4cb2-ae03-efd0c6655ca8,CL003,Classe 3,1c7e2b1a-dea2-4658-9385-2317d54c4b09,2025-2026,30,A2,Christelle-Marine Julien
+efa2c90c-bc4a-48bb-9e13-57f0fa302dcb,CL004,Classe 4,00b53a02-56a4-4765-99a9-6350bad2ef27,2024/2025,500,A-3,Astrid Barbe-Teixeira
+e9072d0c-ce82-4947-bdf0-365f52ecb018,CL005,Classe 5,3a494191-e967-4654-bdee-076ab6d4781c,2024-2025,50,Salle A4,Léon Besnard
+fe4bc865-e893-41bf-b8e3-9535a020cfef,CL006,Classe 6,3c678c47-1c0c-4ff5-b632-0c737c0588ac,2025-2026,45,Salle A5,Henri Delahaye
+58c8dabc-e808-47df-a27c-d79bc43f4361,CL007,Classe 7,9cc7505e-003d-4b42-a636-5c769ab1607b,2025-2026,30,A6,Manon Albert
+3b0f15d3-8407-44ad-a2e1-b6c0ccd3b695,CL008,Classe 8,9cc7505e-003d-4b42-a636-5c769ab1607b,2024/2025,50,A-7,Arthur Adam
+400a8469-f394-442f-8939-309dc285f046,CL009,Classe 9,8fac842e-24bc-4095-82f9-52dbaf3b900c,2025-2026,45,A8,Thierry Andre
+127e9890-e7f1-4c68-a44b-f099fdcb0281,CL010,Classe 10,3a494191-e967-4654-bdee-076ab6d4781c,2024-2025,10,B9,Auguste Lacombe
